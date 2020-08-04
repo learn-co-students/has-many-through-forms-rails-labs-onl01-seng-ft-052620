@@ -1,1 +1,37 @@
-
+<h1><%= @post.title %></h1><br>
+<p>
+  <% @post.categories.each do |category| %>
+    <span><%= category.name %> </span>
+  <% end %>
+</p>
+<p><%= @post.content %></p>
+<h2>Comments</h2>
+<% @post.comments.each do |comment| %>
+  <p>
+    <%= comment.user ? comment.user.username : "unknown_user" %> says: <%= comment.content %>
+  </p>
+<% end %>
+<h2>Users who have commented</h2>
+<ul>
+  <% @post.users.uniq.each do |user| %>
+    <li><%= link_to user.username, user_path(user) %></li>
+  <% end %>
+</ul>
+<h2>New Comment: </h2>
+<%= form_for(@comment, action: "/comments") do |f| %>
+  <%= f.fields_for f.object.build_user do |user_form| %>
+    <%= user_form.label :id, "username: " %>
+    <%= user_form.text_field :id, name:"comment[user_attributes][username]", list: "user_list" %>
+    <datalist id ="user_list">
+      <% User.all.each do |user| %>
+        <input type="hidden" name="comment[user_id]" value="<%= user.id %>">
+        <option value="<%= user.username %>">
+      <% end %>
+    </datalist>
+  <% end %><br>
+  <%= f.label :username, "new user: "%>
+  <%= f.text_field :username, id: "comment_user_attributes_username" %><br>
+  <%= f.hidden_field(:post_id) %>
+  <%= f.text_area :content %><br>
+  <%= f.submit %>
+<% end %>
