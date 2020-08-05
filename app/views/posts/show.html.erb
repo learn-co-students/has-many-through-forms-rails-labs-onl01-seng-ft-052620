@@ -1,1 +1,14 @@
+<%= @post.title %>
+<%= @post.content %>
+<% @post.categories.each do |cat| %>
+<%= cat.name %>
+<% end %>
+<hr>
+<% @post.comments.each do |comm| %>
+<%= comm.content %>
+<% end %>
+
+<% @post.uniq_users.each do |user| %>
+<%= link_to user.username, user_path(user) %>
+<% end %>
 
