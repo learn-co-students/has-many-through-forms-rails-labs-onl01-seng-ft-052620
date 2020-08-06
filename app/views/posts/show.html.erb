@@ -1,1 +1,24 @@
+<h1><%= @post.title %></h1>
+<p><%= @post.content %></p>
+Categories:
+<ul>
+<% @post.categories.each do |category| %>
+    <li><%= category.name %></li>
+    <% end %>
+</ul>
+Comments:
+<ul>
+    <% @post.comments.each do |comment| %>
+    <li><%= comment.user.username %> says: <%= comment.content %></li>
+    <% end %>
+</ul>
+Users who have commented on this post:
+<ul>
+    <%= @commenters.each do |commenter| %>
+    <li><%=link_to commenter.username, user_path(commenter) %></li>
+    <% end %>
+</ul>
+
+Create a new comment:
+<%= render partial: 'comment', locals: {comment: Comment.new, post: @post} %>
 
