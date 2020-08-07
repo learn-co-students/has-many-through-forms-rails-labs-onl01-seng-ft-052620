@@ -4,7 +4,7 @@
   <%= category.name %>
 <% end %>
 <% @post.comments.each do |comment| %>
-  <%= comment.content %>
+  <%= comment.user.username %> says: <%= comment.content %>
 <% end %>
 <% @post.users.distinct.each do |user| %>
   <%= link_to user.username, user_path(user) %>
@@ -13,6 +13,13 @@
 <%= form_for(@comment) do |f| %>
   <%= f.label :content %>
   <%= f.text_field :content %>
+  <%= f.collection_select :user_id, User.all, :id, :username %>
+  <%= f.hidden_field :post_id, value: @post.id %>
+   <%= f.fields_for :user, @comment.build_user do |user_fields| %>
+   <%= user_fields.text_field :username %>
+   <%= user_fields.text_field :email %>
+   <% end %>
+
   <%= f.submit %>
   <% end %>
 
